@@ -1,16 +1,53 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState, useMemo } from "react";
+import { SummaryCards } from "@/components/SummaryCards";
+import { MonthlyTable } from "@/components/MonthlyTable";
+import { ProfitChart } from "@/components/ProfitChart";
+import {
+  MonthlyEntry,
+  computeEntry,
+  loadEntries,
+  saveEntries,
+  formatCurrency,
+} from "@/lib/financial-data";
+import { Building2 } from "lucide-react";
 
-// IMPORTANT: Fully REPLACE this with your own code
-const PlaceholderIndex = () => {
-  // PLACEHOLDER: Replace this entire return statement with the user's app.
-  // The inline background color is intentionally not part of the design system.
+export default function Index() {
+  const [rawEntries, setRawEntries] = useState<MonthlyEntry[]>(loadEntries);
+
+  const entries = useMemo(() => rawEntries.map(computeEntry), [rawEntries]);
+
+  const handleUpdate = (updated: MonthlyEntry[]) => {
+    setRawEntries(updated);
+    saveEntries(updated);
+  };
+
+  const totalTrust = entries.reduce((s, e) => s + e.trustSurplus, 0);
+
   return (
-    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: '#fcfbf8' }}>
-      <img data-lovable-blank-page-placeholder="REMOVE_THIS" src="/placeholder.svg" alt="Your app will live here!" />
+    <div className="min-h-screen bg-background">
+      <header className="border-b bg-card">
+        <div className="container flex items-center justify-between py-5">
+          <div className="flex items-center gap-3">
+            <div className="flex items-center justify-center h-9 w-9 rounded-lg bg-primary">
+              <Building2 className="h-5 w-5 text-primary-foreground" />
+            </div>
+            <div>
+              <h1 className="text-lg font-semibold tracking-tight">LLC Financials</h1>
+              <p className="text-xs text-muted-foreground">Monthly tracking model</p>
+            </div>
+          </div>
+          <div className="text-right">
+            <p className="text-xs text-muted-foreground uppercase tracking-wider">Cumulative Trust</p>
+            <p className="text-lg font-semibold font-mono text-trust">{formatCurrency(totalTrust)}</p>
+          </div>
+        </div>
+      </header>
+
+      <main className="container py-8 space-y-6">
+        <SummaryCards entries={entries} />
+        <ProfitChart entries={entries} />
+        <MonthlyTable entries={entries} onUpdate={handleUpdate} rawEntries={rawEntries} />
+      </main>
     </div>
   );
-};
-
-const Index = PlaceholderIndex;
-
-export default Index;
+}
