@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      tracking_model: {
+        Row: {
+          id: string
+          month: string
+          mrr: number
+          costs: number
+          draw: number
+          trust_percent: number
+          created_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          id?: string
+          month: string
+          mrr?: number
+          costs?: number
+          draw?: number
+          trust_percent?: number
+          created_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          id?: string
+          month?: string
+          mrr?: number
+          costs?: number
+          draw?: number
+          trust_percent?: number
+          created_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       app_files: {
         Row: {
           associated_sop_id: string

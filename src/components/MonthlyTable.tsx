@@ -14,7 +14,7 @@ import { Plus, Trash2 } from "lucide-react";
 
 interface Props {
   entries: ComputedEntry[];
-  onUpdate: (entries: MonthlyEntry[]) => void;
+  onUpdate: (entries: MonthlyEntry[]) => void | Promise<void>;
   rawEntries: MonthlyEntry[];
 }
 
